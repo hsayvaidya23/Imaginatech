@@ -2,6 +2,7 @@
 import { useToast } from "@/components/ui/use-toast";
 import { getImageSize, dataUrl } from "@/lib/utils";
 import { CldImage, CldUploadWidget } from "next-cloudinary";
+import { PlaceholderValue } from "next/dist/shared/lib/get-img-props";
 import Image from "next/image";
 
 type MediaUploaderProps = {
