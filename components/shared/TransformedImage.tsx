@@ -1,7 +1,8 @@
+"use client";
 import React from 'react'
 import Image from 'next/image'
-import { getImageSize, dataUrl, debounce } from "@/lib/utils";
-import { CldImage } from "next-cloudinary";
+import { getImageSize, dataUrl, debounce, download } from "@/lib/utils";
+import { CldImage, getCldImageUrl } from "next-cloudinary";
 import { PlaceholderValue } from "next/dist/shared/lib/get-img-props";
 
 
@@ -15,7 +16,16 @@ const TransformedImage = ({
     hasDownload = false
 }: TransformedImageProps ) => {
 
-    const downloadHandler = () => {}
+    const downloadHandler = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+        e.preventDefault();
+
+        download(getCldImageUrl({
+            width: image?.width,
+            height: image?.height,
+            src: image?.publicId,
+            ...transformationConfig
+        }), title)
+    }
 
   return (
     <div className="flex flex-col gap-4">
@@ -56,7 +66,7 @@ const TransformedImage = ({
                   onError={() => {
                     debounce(() => {
                         setIsTransforming && setIsTransforming(false);
-                    },  8000)
+                    },  8000)()
                   }}
                   {...transformationConfig}
                 />
@@ -66,8 +76,9 @@ const TransformedImage = ({
                             src="/assets/icons/spinner.svg"
                             width={50}
                             height={50}
-                            alt="Transforming"
+                            alt="spinner"
                         />
+                        <p className="text-white">Please wait...</p>
                     </div>
                 )}
             </div>
